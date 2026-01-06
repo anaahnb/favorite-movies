@@ -3,9 +3,9 @@
     <img :class="$style.image" src="../assets/img/banner.png" alt="">
     <div :class="$style.titleContainer">
       <h1>
-        Track films you’ve watched. <br>
-        Save those you want to see. <br>
-        Tell your friends what’s good.
+        Encontre filmes incríveis. <br>
+        Marque seus favoritos. <br>
+        Decida o que fica e o que sai.
       </h1>
     </div>
   </div>
