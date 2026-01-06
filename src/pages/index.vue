@@ -8,10 +8,11 @@
         :loading="loadingSearchList"
         @search="searchMovie"
         @load-more="loadMoreMovies"
-        @select="onSelectMovie" />
+        @select="onSelectMovie"
+        @explicit-change="includeExplicit = $event" />
       <PopularMoviesList
         :movies="movies"
-        @select="(movie) => searchMovieSelected = movie"/>
+        @select="searchMovieSelected = $event"/>
     </div>
   </div>
 </template>
@@ -31,7 +32,7 @@ const searchMovieName = ref('');
 const searchMovieSelected = ref<Movie>();
 const searchList = ref<Movie[]>([]);
 const loadingSearchList = ref(false);
-const explict = ref(false);
+const includeExplicit = ref(false)
 
 const page = ref(1);
 const totalPages = ref(1);
