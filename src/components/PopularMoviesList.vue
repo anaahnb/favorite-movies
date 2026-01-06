@@ -8,6 +8,7 @@
         :key="movie.id"
         :src="getImageUrl(movie.poster_path)"
         :alt="`Cartaz do filme ${movie.original_title}`"
+        @click="onSelectMovie(movie)"
       />
     </div>
 
@@ -23,11 +24,19 @@ const props = defineProps<{
   movies: Movie[]
 }>()
 
+const emit = defineEmits<{
+  (event: 'select', movie: Movie): void;
+}>()
+
 const IMAGE_BASE_URL = import.meta.env.VITE_TMDB_IMAGE_BASE_URL
 
 function getImageUrl(path: string | null) {
   if (!path) return ''
   return `${IMAGE_BASE_URL}${path}`
+}
+
+function onSelectMovie(movie: Movie) {
+  emit('select', movie)
 }
 
 </script>

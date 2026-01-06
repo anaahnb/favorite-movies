@@ -1,6 +1,7 @@
 export interface Movie {
   id: number
   original_title: string
+  title: string
   poster_path: string | null
   backdrop_path: string | null
   overview: string

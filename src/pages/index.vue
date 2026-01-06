@@ -9,7 +9,9 @@
         @search="searchMovie"
         @load-more="loadMoreMovies"
         @select="onSelectMovie" />
-      <PopularMoviesList :movies="movies" />
+      <PopularMoviesList
+        :movies="movies"
+        @select="(movie) => searchMovieSelected = movie"/>
     </div>
   </div>
 </template>

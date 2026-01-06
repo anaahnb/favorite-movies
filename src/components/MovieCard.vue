@@ -22,6 +22,7 @@ defineProps<{
 
   &:hover {
     border: 2px #00ac1c solid;
+    cursor: pointer;
   }
 }
 </style>
