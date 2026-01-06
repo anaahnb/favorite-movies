@@ -52,6 +52,8 @@ const imageSrc = computed(() => {
   width: 100%;
   height: auto;
   overflow: hidden;
+  display: flex;
+  justify-content: center;
 }
 
 .image {
@@ -79,12 +81,10 @@ const imageSrc = computed(() => {
 .titleContainer {
   position: absolute;
   bottom: 24px;
-  left: 50%;
-  transform: translateX(-50%);
   z-index: 2;
 
   text-align: center;
-  max-width: 80rem;
+  max-width: 65rem;
   padding: 0 1rem;
 
   h1 {
@@ -99,6 +99,12 @@ const imageSrc = computed(() => {
     font-size: 16px;
     color: #89a;
     text-align: center;
+  }
+
+  span {
+    font-family: Arial;
+    font-weight: 400;
+    font-size: 16px;
   }
 }
 </style>
