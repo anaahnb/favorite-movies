@@ -44,6 +44,42 @@ function onSelectMovie(movie: Movie) {
   searchList.value = []
 }
 
+async function fetchMovies({ query, pageNumber }: { query: string; pageNumber: number }) {
+  try {
+    const params = {
+      query,
+      page: pageNumber,
+      include_adult: includeExplicit.value,
+      language: 'pt-BR',
+    }
+
+    return await getMovieListByName(params)
+  } catch (error) {
+    console.error(error)
+    return null
+  }
+}
+
+async function searchMovie(query: string) {
+  if (!query.trim()) return
+  if (loadingSearchList.value) return
+
+  loadingSearchList.value = true
+  page.value = 1
+
+  const res = await fetchMovies({
+    query,
+    pageNumber: page.value,
+  })
+
+  if (res) {
+    searchList.value = res.results
+    totalPages.value = res.total_pages
+  }
+
+  loadingSearchList.value = false
+}
+
 async function loadMoreMovies() {
   if (loadingSearchList.value) return
   if (page.value >= totalPages.value) return
@@ -51,47 +87,16 @@ async function loadMoreMovies() {
   loadingSearchList.value = true
   page.value += 1
 
-  try {
-    const params = {
-      query: searchMovieName.value,
-      page: page.value,
-      include_adult: false,
-      language: 'pt-BR',
-    }
+  const res = await fetchMovies({
+    query: searchMovieName.value,
+    pageNumber: page.value,
+  })
 
-    const res = await getMovieListByName(params)
-
+  if (res) {
     searchList.value.push(...res.results)
-  } catch (error) {
-    console.error(error)
-  } finally {
-    loadingSearchList.value = false
   }
-}
 
-async function searchMovie(query: string) {
-  if (!query.trim()) return
-
-  loadingSearchList.value = true
-  page.value = 1
-
-  try {
-    const params = {
-      query,
-      page: page.value,
-      include_adult: false,
-      language: 'pt-BR',
-    }
-
-    const res = await getMovieListByName(params)
-
-    searchList.value = res.results
-    totalPages.value = res.total_pages
-  } catch (error) {
-    console.error(error)
-  } finally {
-    loadingSearchList.value = false
-  }
+  loadingSearchList.value = false
 }
 
 async function loadPopularMovies(page: number = 1) {
