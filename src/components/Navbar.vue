@@ -21,12 +21,12 @@
         <div
           v-else
           :class="$style.nav">
-          <RouterLink
-            to="/"
+          <button
+            type="button"
             :class="$style.link"
-            active-class="active">
-              Inscreva-se
-          </RouterLink>
+            @click="openRegister">
+            Inscreva-se
+          </button>
           <RouterLink
             to="/"
             :class="$style.link"
@@ -43,6 +43,14 @@
 import { ref } from 'vue';
 
 const isAutenthicate = ref(false)
+
+const emit = defineEmits<{
+  (e: 'open-register'): void
+}>()
+
+function openRegister() {
+  emit('open-register')
+}
 
 </script>
 
@@ -77,6 +85,9 @@ const isAutenthicate = ref(false)
   text-decoration: none;
   font-size: 0.95rem;
   font-weight: 500;
+
+  border: 0;
+  background: transparent;
 
   &:hover {
     color: #fff;

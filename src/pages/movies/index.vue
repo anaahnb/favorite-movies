@@ -18,12 +18,12 @@
 </template>
 
 <script lang="ts" setup>
+import { onMounted, ref } from 'vue';
 import Banner from '~/components/Banner.vue';
 import SearchInput from '~/components/SearchInput.vue';
+import PopularMoviesList from '~/components/PopularMoviesList.vue';
 import { getMovieListByName, getPopularMovies } from '~/api/tmdb';
 import type { Movie } from '~/types/movies';
-import { onMounted, ref } from 'vue';
-import PopularMoviesList from '~/components/PopularMoviesList.vue';
 
 const movies = ref<Movie[]>([]);
 const loading = ref(false);
