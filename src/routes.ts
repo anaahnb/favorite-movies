@@ -5,7 +5,12 @@ function initRouter(basePath: string) {
     {
       path: '/',
       name: 'index',
-      component: () => import('~/pages/index.vue'),
+      component: () => import('~/pages/movies/index.vue'),
+    },
+    {
+      path: '/details',
+      name: 'details',
+      component: () => import('~/pages/movies/details.vue'),
     },
     {
       path: '/favorites',
