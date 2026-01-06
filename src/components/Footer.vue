@@ -9,7 +9,8 @@
 
 <style lang="scss">
   footer {
-    background-color: #2c3440;
+    background: #14181c;
+    border-top: 1px solid #2c3440;
     padding: .5rem 0;
     display: flex;
     justify-content: center;
