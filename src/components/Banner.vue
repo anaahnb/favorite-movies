@@ -8,19 +8,18 @@
     <div :class="$style.overlay" />
 
     <div :class="$style.titleContainer">
-      <h1 v-if="selectedMovie">
-        {{ selectedMovie.title }}
-      </h1>
-
-      <p v-if="selectedMovie">
-        {{ selectedMovie.overview }}
-      </p>
-
-      <h1 v-else>
+      <h1>
         Encontre filmes incríveis. <br />
         Marque seus favoritos. <br />
         Decida o que fica e o que sai.
       </h1>
+    </div>
+
+    <div :class="$style.movieName">
+      <p v-if="selectedMovie">
+        {{ selectedMovie?.title }} ({{ selectedMovie?.release_date }})
+      </p>
+      <p v-else> Marty Supreme (2025)</p>
     </div>
   </div>
 </template>
@@ -54,6 +53,7 @@ const imageSrc = computed(() => {
   overflow: hidden;
   display: flex;
   justify-content: center;
+  align-items: center;
 }
 
 .image {
@@ -68,15 +68,53 @@ const imageSrc = computed(() => {
   pointer-events: none;
   z-index: 1;
 
-  background: linear-gradient(
-    to bottom,
-    rgba(0, 0, 0, 0) 0%,
-    rgba(0, 0, 0, 0) 35%,
-    rgba(0, 0, 0, 0.5) 60%,
-    rgba(0, 0, 0, 0.85) 80%,
-    rgba(0, 0, 0, 1) 100%
-  );
+  background:
+    linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0) 0%,
+      rgba(0, 0, 0, 0) 35%,
+      rgba(0, 0, 0, 0.5) 60%,
+      rgba(0, 0, 0, 0.85) 80%,
+      rgba(0, 0, 0, 1) 100%
+    ),
+
+    linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0.35) 0%,
+      rgba(0, 0, 0, 0) 25%
+    ),
+
+    linear-gradient(
+      to right,
+      rgba(0, 0, 0, 0) 0%,
+      rgba(0, 0, 0, 0) 65%,
+      rgba(0, 0, 0, 0.5) 100%,
+    ),
+
+    linear-gradient(
+      to left,
+      rgba(0, 0, 0, 0.25) 0%,
+      rgba(0, 0, 0, 0) 20%
+    );
 }
+
+
+.movieName {
+  p {
+    position: absolute;
+    right: .75rem;
+
+    top: 30%;
+    writing-mode: vertical-lr;
+
+    font-size: 14px;
+    color: #89a;
+    z-index: 2;
+
+    white-space: nowrap;
+  }
+}
+
 
 .titleContainer {
   position: absolute;

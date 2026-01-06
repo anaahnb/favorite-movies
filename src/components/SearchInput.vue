@@ -113,6 +113,8 @@ function onScroll() {
   .searchContainer {
     display: flex;
     margin-bottom: .375rem;
+    gap: .5rem;
+
     input {
       background: #2c3440;
       color: #FFF;
@@ -120,7 +122,8 @@ function onScroll() {
       border-radius: 0.25rem;
       padding: 0.5rem;
       border: none;
-      width: 18rem;
+      width: 100%;
+      box-sizing: border-box;
 
       &::placeholder {
         color: #89a;
@@ -131,31 +134,26 @@ function onScroll() {
       .inputList {
         position: relative;
         width: 18rem;
-  
-        input {
-          width: 18rem;
-          margin-right: 0;
-        }
-  
+
         .results {
           position: absolute;
           top: 100%;
           left: 0;
           width: 18rem;
-  
+
           max-height: 20rem;
           overflow-y: auto;
-  
+
           background: #1f252f;
           border-radius: 0.25rem;
           margin-top: 0.25rem;
           z-index: 10;
-  
+
           .option {
             display: flex;
             gap: 0.5rem;
             align-items: center;
-  
+
             width: 100%;
             padding: 0.5rem;
             background: transparent;
@@ -163,26 +161,26 @@ function onScroll() {
             text-align: left;
             color: #fff;
             cursor: pointer;
-  
+
             &:hover {
               background: #2c3440;
             }
-  
+
             img {
               width: 2.5rem;
               border-radius: 0.125rem;
             }
-  
+
             strong {
               font-weight: 500;
             }
-  
+
             span {
               color: #9ab;
               margin-left: 0.25rem;
             }
           }
-  
+
           .loading {
             padding: 0.75rem;
             text-align: center;
