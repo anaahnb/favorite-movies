@@ -1,46 +1,24 @@
 <template>
   <header :class="$style.navbar">
     <div :class="$style.container">
-      <nav>
-        <div
-          v-if="isAutenthicate"
-          :class="$style.nav">
-          <RouterLink
-            to="/"
-            :class="$style.link"
-            active-class="active">
-            Explorar
-          </RouterLink>
-          <RouterLink
-            to="/favorites"
-            :class="$style.link"
-            active-class="active">
-            Favoritos
-          </RouterLink>
-        </div>
-        <div
-          v-else
-          :class="$style.nav">
-          <button
-            type="button"
-            :class="$style.link"
-            @click="openRegister">
-            Inscreva-se
-          </button>
-          <RouterLink
-            to="/"
-            :class="$style.link"
-            active-class="active">
-              Entrar
-          </RouterLink>
-        </div>
+      <nav :class="$style.nav">
+        <component
+          v-for="item in menuItems"
+          :key="item.label"
+          :is="item.component"
+          v-bind="item.props"
+          :class="$style.link"
+          @click="item.onClick">
+          {{ item.label }}
+        </component>
       </nav>
     </div>
   </header>
 </template>
 
-<script lang="ts" setup>
-import { ref } from 'vue';
+<script setup lang="ts">
+import { ref, computed } from 'vue'
+import { RouterLink } from 'vue-router'
 
 const isAutenthicate = ref(false)
 
@@ -52,7 +30,44 @@ function openRegister() {
   emit('open-register')
 }
 
+type MenuItem = {
+  label: string
+  component: any
+  props?: Record<string, any>
+  onClick?: () => void
+}
+
+const menuItems = computed<MenuItem[]>(() => {
+  if (isAutenthicate.value) {
+    return [
+      {
+        label: 'Explorar',
+        component: RouterLink,
+        props: { to: '/' },
+      },
+      {
+        label: 'Favoritos',
+        component: RouterLink,
+        props: { to: '/favorites' },
+      },
+    ]
+  }
+
+  return [
+    {
+      label: 'Inscreva-se',
+      component: 'button',
+      onClick: openRegister,
+    },
+    {
+      label: 'Entrar',
+      component: RouterLink,
+      props: { to: '/' },
+    },
+  ]
+})
 </script>
+
 
 <style lang="scss" module>
 .navbar {
