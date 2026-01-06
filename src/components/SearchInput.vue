@@ -1,39 +1,34 @@
 <template>
   <div :class="$style.filter">
     <div :class="$style.searchContainer">
-      <div :class="$style.inputWrapper">
-        <div :class="$style.inputList">
-          <input
-            type="text"
-            v-model="search"
-            placeholder="Pesquise pelo nome do filme"
-            @keyup.enter="onSearch" />
-          <div
-            v-show="showResults"
-            :class="$style.results"
-            ref="resultsRef"
-            @scroll="onScroll">
-            <button
-              v-for="movie in movies"
-              :key="movie.id"
-              :class="$style.option"
-              @click="onSelect(movie)">
-              <img
-                v-if="movie.poster_path"
-                :src="getImageUrl(movie.poster_path)"
-                :alt="`Cartaz do filme ${movie.original_title}`" />
-  
-              <div>
-                <strong>{{ movie.original_title }}</strong>
-                <span v-if="movie.release_date">
-                  ({{ movie.release_date.slice(0, 4) }})
-                </span>
-              </div>
-            </button>
-  
-            <div v-if="loading" :class="$style.loading">
-              Carregando...
+      <div :class="$style.inputList">
+        <Input
+          v-model="search"
+          placeholder="Pesquise pelo nome do filme"
+          @enter="onSearch" />
+        <div
+          v-show="showResults"
+          :class="$style.results"
+          ref="resultsRef"
+          @scroll="onScroll">
+          <button
+            v-for="movie in movies"
+            :key="movie.id"
+            :class="$style.option"
+            @click="onSelect(movie)">
+            <img
+              v-if="movie.poster_path"
+              :src="getImageUrl(movie.poster_path)"
+              :alt="`Cartaz do filme ${movie.original_title}`" />
+            <div>
+              <strong>{{ movie.original_title }}</strong>
+              <span v-if="movie.release_date">
+                ({{ movie.release_date.slice(0, 4) }})
+              </span>
             </div>
+          </button>
+          <div v-if="loading" :class="$style.loading">
+            Carregando...
           </div>
         </div>
       </div>
@@ -50,10 +45,10 @@
   </div>
 </template>
 
-
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue'
-import Button from './Button.vue'
+import Button from '~/components/Button.vue'
+import Input from '~/components/Input.vue';
 import type { Movie } from '~/types/movies'
 
 const search = defineModel<string>({ default: '' })
@@ -112,80 +107,64 @@ function onScroll() {
 .filter {
   .searchContainer {
     display: flex;
-    margin-bottom: .375rem;
+    margin: .5rem 0 .375rem 0;
     gap: .5rem;
 
-    input {
-      background: #2c3440;
-      color: #FFF;
-      font-size: 1.125rem;
-      border-radius: 0.25rem;
-      padding: 0.5rem;
-      border: none;
-      width: 100%;
-      box-sizing: border-box;
+    .inputList {
+      position: relative;
+      width: 18rem;
+      height: 100%;
 
-      &::placeholder {
-        color: #89a;
-      }
-    }
-
-    .inputWrapper {
-      .inputList {
-        position: relative;
+      .results {
+        position: absolute;
+        top: 100%;
+        left: 0;
         width: 18rem;
 
-        .results {
-          position: absolute;
-          top: 100%;
-          left: 0;
-          width: 18rem;
+        max-height: 20rem;
+        overflow-y: auto;
 
-          max-height: 20rem;
-          overflow-y: auto;
+        background: #1f252f;
+        border-radius: 0.25rem;
+        margin-top: 0.25rem;
+        z-index: 10;
 
-          background: #1f252f;
-          border-radius: 0.25rem;
-          margin-top: 0.25rem;
-          z-index: 10;
+        .option {
+          display: flex;
+          gap: 0.5rem;
+          align-items: center;
 
-          .option {
-            display: flex;
-            gap: 0.5rem;
-            align-items: center;
+          width: 100%;
+          padding: 0.5rem;
+          background: transparent;
+          border: none;
+          text-align: left;
+          color: #fff;
+          cursor: pointer;
 
-            width: 100%;
-            padding: 0.5rem;
-            background: transparent;
-            border: none;
-            text-align: left;
-            color: #fff;
-            cursor: pointer;
-
-            &:hover {
-              background: #2c3440;
-            }
-
-            img {
-              width: 2.5rem;
-              border-radius: 0.125rem;
-            }
-
-            strong {
-              font-weight: 500;
-            }
-
-            span {
-              color: #9ab;
-              margin-left: 0.25rem;
-            }
+          &:hover {
+            background: #2c3440;
           }
 
-          .loading {
-            padding: 0.75rem;
-            text-align: center;
+          img {
+            width: 2.5rem;
+            border-radius: 0.125rem;
+          }
+
+          strong {
+            font-weight: 500;
+          }
+
+          span {
             color: #9ab;
+            margin-left: 0.25rem;
           }
+        }
+
+        .loading {
+          padding: 0.75rem;
+          text-align: center;
+          color: #9ab;
         }
       }
     }

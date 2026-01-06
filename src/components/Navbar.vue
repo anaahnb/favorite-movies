@@ -20,7 +20,7 @@
 import { ref, computed } from 'vue'
 import { RouterLink } from 'vue-router'
 
-const isAutenthicate = ref(false)
+const isAutenthicate = ref(true)
 
 const emit = defineEmits<{
   (e: 'open-register'): void
