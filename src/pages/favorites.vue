@@ -2,7 +2,7 @@
   <div :class="$style.container">
     <div :class="$style.favoriteList">
       <div :class="$style.title">
-        <p>Favoritos de <strong>Ana</strong></p>
+        <p>Favoritos de <strong>{{ userName }}</strong></p>
         <div :class="$style.listDetails">
           <span>Lista atualizada ontem</span>
         </div>
@@ -13,12 +13,17 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import { getPopularMovies } from '~/api/tmdb';
 import FavoritesMoviesList from '~/components/FavoritesMoviesList.vue';
+import { useAuthStore } from '~/stores/auth';
 import type { Movie } from '~/types/movies';
 
+const auth = useAuthStore();
+
 const movies = ref<Movie[]>([]);
+
+const userName = computed(() => auth.user?.name ?? '');
 
 async function loadPopularMovies(page: number = 1) {
   try {

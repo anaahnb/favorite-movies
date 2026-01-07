@@ -1,11 +1,6 @@
 <template>
   <div :class="$style.bannerContainer">
-    <img
-      :class="$style.image"
-      :src="imageSrc"
-      alt="" />
-
-    <div :class="$style.overlay" />
+    <MovieBanner :image="imageSrc" />
 
     <div :class="$style.titleContainer">
       <h1>
@@ -28,6 +23,7 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 import type { Movie } from '~/types/movies'
+import MovieBanner from './movies/MovieBanner.vue';
 
 const props = defineProps<{
   selectedMovie?: Movie
@@ -55,49 +51,6 @@ const imageSrc = computed(() => {
   justify-content: center;
   align-items: center;
 }
-
-.image {
-  width: 100%;
-  height: auto;
-  object-fit: cover;
-}
-
-.overlay {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  z-index: 1;
-
-  background:
-    linear-gradient(
-      to bottom,
-      rgba(0, 0, 0, 0) 0%,
-      rgba(0, 0, 0, 0) 35%,
-      rgba(0, 0, 0, 0.5) 60%,
-      rgba(0, 0, 0, 0.85) 80%,
-      rgba(0, 0, 0, 1) 100%
-    ),
-
-    linear-gradient(
-      to bottom,
-      rgba(0, 0, 0, 0.35) 0%,
-      rgba(0, 0, 0, 0) 25%
-    ),
-
-    linear-gradient(
-      to right,
-      rgba(0, 0, 0, 0) 0%,
-      rgba(0, 0, 0, 0) 65%,
-      rgba(0, 0, 0, 0.5) 100%,
-    ),
-
-    linear-gradient(
-      to left,
-      rgba(0, 0, 0, 0.25) 0%,
-      rgba(0, 0, 0, 0) 20%
-    );
-}
-
 
 .movieName {
   p {

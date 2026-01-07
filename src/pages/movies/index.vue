@@ -19,11 +19,14 @@
 
 <script lang="ts" setup>
 import { onMounted, ref } from 'vue';
+import { useRouter } from 'vue-router';
 import Banner from '~/components/Banner.vue';
 import SearchInput from '~/components/SearchInput.vue';
 import PopularMoviesList from '~/components/PopularMoviesList.vue';
 import { getMovieListByName, getPopularMovies } from '~/api/tmdb';
 import type { Movie } from '~/types/movies';
+
+const router = useRouter();
 
 const movies = ref<Movie[]>([]);
 const loading = ref(false);
@@ -38,10 +41,13 @@ const page = ref(1);
 const totalPages = ref(1);
 
 function onSelectMovie(movie: Movie) {
-  console.log('Filme selecionado:', movie)
-  searchMovieSelected.value = movie
+  searchMovieSelected.value = movie;
+  searchList.value = [];
 
-  searchList.value = []
+  router.push({
+    name: 'details',
+    params: { id: movie.id },
+  });
 }
 
 async function fetchMovies({ query, pageNumber }: { query: string; pageNumber: number }) {

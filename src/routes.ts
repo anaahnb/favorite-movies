@@ -1,4 +1,5 @@
 import { createWebHistory, createRouter } from 'vue-router';
+import { useAuthStore } from '~/stores/auth';
 
 function initRouter(basePath: string) {
   let routes = [
@@ -8,7 +9,7 @@ function initRouter(basePath: string) {
       component: () => import('~/pages/movies/index.vue'),
     },
     {
-      path: '/details',
+      path: '/details/:id',
       name: 'details',
       component: () => import('~/pages/movies/details.vue'),
     },
@@ -16,6 +17,9 @@ function initRouter(basePath: string) {
       path: '/favorites',
       name: 'favorites',
       component: () => import('~/pages/favorites.vue'),
+      meta: {
+        requiresAuth: true,
+      },
     },
   ];
 
@@ -24,10 +28,20 @@ function initRouter(basePath: string) {
     return el;
   });
 
-  return createRouter({
+  const router = createRouter({
     history: createWebHistory(),
     routes,
   });
+
+  router.beforeEach(async (to) => {
+    const auth = useAuthStore();
+
+    if (to.meta.requiresAuth && !auth.isAuthenticated) {
+      return { path: '/' };
+    }
+  });
+
+  return router;
 }
 
 export default initRouter;
