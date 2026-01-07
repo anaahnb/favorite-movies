@@ -1,7 +1,5 @@
 <template>
   <div :class="$style.listContainer">
-    <h2>MAIS POPULARES...</h2>
-
     <div :class="$style.moviesWrapper">
       <MovieCard
         v-for="movie in movies"
@@ -9,10 +7,8 @@
         :src="getImageUrl(movie.poster_path)"
         :alt="`Cartaz do filme ${movie.original_title}`"
         @click="onSelectMovie(movie)"
-      />
+        removable />
     </div>
-
-    <div :class="$style.fadeRight" />
   </div>
 </template>
 
@@ -38,51 +34,17 @@ function getImageUrl(path: string | null) {
 function onSelectMovie(movie: Movie) {
   emit('select', movie)
 }
-
 </script>
 
 <style lang="scss" module>
 .listContainer {
-  max-width: 60rem;
   margin-top: 2rem;
-  position: relative;
+  width: 60rem;
 
-  h2 {
-    font-weight: 400;
-    color: #9ab;
-    font-size: 1rem;
-    font-family: Arial, Helvetica, sans-serif;
-
-    text-decoration: underline;
-    text-decoration-thickness: 1px;
-    text-underline-offset: 6px;
-    text-decoration-color: #9ab;
+  .moviesWrapper {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
   }
-}
-
-.moviesWrapper {
-  display: flex;
-  gap: 1rem;
-  margin-top: 1rem;
-
-  overflow: hidden;
-  position: relative;
-  padding: .375rem;
-}
-
-.fadeRight {
-  position: absolute;
-  top: 2.5rem;
-  right: 0;
-  width: 6rem;
-  height: calc(100% - 2.5rem);
-
-  pointer-events: none;
-
-  background: linear-gradient(
-    to right,
-    rgba(0, 0, 0, 0),
-    rgba(0, 0, 0, 0.85)
-  );
 }
 </style>

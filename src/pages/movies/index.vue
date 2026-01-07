@@ -112,7 +112,6 @@ async function loadPopularMovies(page: number = 1) {
     const res = await getPopularMovies(params)
 
     movies.value = res.results;
-    console.log(movies.value)
   } catch (error) {
     console.error(error)
   } finally {
