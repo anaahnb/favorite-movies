@@ -49,6 +49,7 @@ const form = reactive<RegisterForm>({
   name: '',
   email: '',
   password: '',
+  password_confirmation: '',
 });
 
 const fields: RegisterField[] = [
@@ -73,6 +74,14 @@ const fields: RegisterField[] = [
     required: true,
     minlength: 6,
   },
+    {
+    key: 'password_confirmation',
+    label: 'Confirmar senha',
+    type: 'password',
+    placeholder: '••••••••',
+    required: true,
+    minlength: 6,
+  }
 ];
 
 function submit() {

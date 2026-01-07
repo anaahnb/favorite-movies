@@ -1,4 +1,4 @@
-import { axios } from '~/plugins/axios';
+import { tmdbAxios as axios } from '~/plugins/axios-TMDB';
 
 export const getPopularMovies = (params?: object) =>
   axios

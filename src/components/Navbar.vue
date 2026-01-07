@@ -17,18 +17,13 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { computed } from 'vue'
 import { RouterLink } from 'vue-router'
+import { useAuthStore } from '~/stores/auth';
+import { useUIStore } from '~/stores/ui';
 
-const isAutenthicate = ref(true)
-
-const emit = defineEmits<{
-  (e: 'open-register'): void
-}>()
-
-function openRegister() {
-  emit('open-register')
-}
+const auth = useAuthStore();
+const ui = useUIStore();
 
 type MenuItem = {
   label: string
@@ -38,7 +33,7 @@ type MenuItem = {
 }
 
 const menuItems = computed<MenuItem[]>(() => {
-  if (isAutenthicate.value) {
+  if (auth.isAuthenticated) {
     return [
       {
         label: 'Explorar',
@@ -50,6 +45,11 @@ const menuItems = computed<MenuItem[]>(() => {
         component: RouterLink,
         props: { to: '/favorites' },
       },
+      {
+        label: 'Sair',
+        component: 'button',
+        onClick: auth.logout,
+      },
     ]
   }
 
@@ -57,12 +57,12 @@ const menuItems = computed<MenuItem[]>(() => {
     {
       label: 'Inscreva-se',
       component: 'button',
-      onClick: openRegister,
+      onClick: ui.openRegister,
     },
     {
       label: 'Entrar',
-      component: RouterLink,
-      props: { to: '/' },
+      component: 'button',
+      onClick: ui.openLogin,
     },
   ]
 })

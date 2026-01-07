@@ -1,21 +1,46 @@
 <template>
-  <DefaultLayout>
-    <Navbar @open-register="showRegisterModal = true" />
-    <RouterView />
-    <Footer />
+  <Navbar />
+  <RouterView />
+  <Footer />
 
-    <RegisterModal v-model="showRegisterModal" />
-  </DefaultLayout>
+  <RegisterModal
+    v-model="ui.showRegisterModal"
+    @submit="handleRegister"/>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
-import { RouterView } from 'vue-router';
-import Footer from '~/components/Footer.vue';
-import Navbar from '~/components/Navbar.vue';
+import { onMounted } from 'vue';
+import { useUIStore } from '~/stores/ui';
+import { useAuthStore } from '~/stores/auth';
 import RegisterModal from '~/components/RegisterModal.vue';
+import Navbar from '~/components/Navbar.vue';
+import Footer from '~/components/Footer.vue';
+import type { RegisterForm } from '~/types/register';
+import { useToast } from 'vue-toast-notification';
+import 'vue-toast-notification/dist/theme-sugar.css';
 
-defineOptions({ shadow: true });
+const ui = useUIStore();
+const auth = useAuthStore();
+const $toast = useToast();
 
-const showRegisterModal = ref(false)
+async function handleRegister(payload: RegisterForm) {
+  try {
+    console.log('payload', payload)
+    await auth.register(payload);
+
+    $toast.success('Usuário cadastrado!', {
+      position: 'top-right'
+    })
+  } catch (error: any) {
+    const message = error?.response?.data?.message || 'Não foi possível criar o usuário';
+    $toast.error(message, { position: 'top-right' });
+  } finally {
+    ui.closeRegister();
+  }
+}
+
+onMounted(() => {
+  auth.fetchUser();
+});
 </script>
+

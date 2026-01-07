@@ -1,0 +1,79 @@
+import { defineStore } from 'pinia';
+import { ref, computed } from 'vue';
+import { loginUser, registerUser, logoutUser, me } from '~/api/auth';
+import type { RegisterForm } from '~/types/register';
+
+export const useAuthStore = defineStore('auth', () => {
+  const user = ref<any | null>(null);
+  const token = ref<string | null>(localStorage.getItem('token'));
+  const loading = ref(false);
+
+  const isAuthenticated = computed(() => !!user.value);
+
+  async function register(payload: RegisterForm) {
+    loading.value = true;
+    try {
+      const res = await registerUser(payload);
+      token.value = res.token;
+      localStorage.setItem('token', res.token);
+
+      await fetchUser();
+      return res;
+    } catch (error) {
+      throw error;
+    } finally {
+      loading.value = false;
+    }
+  }
+
+  async function login(payload: { email: string; password: string }) {
+    loading.value = true;
+    try {
+      const res = await loginUser(payload);
+      token.value = res.token;
+      localStorage.setItem('token', res.token);
+
+      await fetchUser();
+      return res;
+    } finally {
+      loading.value = false;
+    }
+  }
+
+  async function fetchUser() {
+    if (!token.value) return;
+
+    try {
+      user.value = await me();
+    } catch {
+      clearSession();
+    }
+  }
+
+  function clearSession() {
+    user.value = null;
+    token.value = null;
+    localStorage.removeItem('token');
+  }
+
+
+  async function logout() {
+    try {
+      await logoutUser();
+    } finally {
+      clearSession();
+    }
+  }
+
+
+  return {
+    user,
+    token,
+    loading,
+    isAuthenticated,
+    register,
+    login,
+    logout,
+    fetchUser,
+  };
+});
