@@ -1,7 +1,9 @@
 <template>
   <div :class="$style.main">
     <div :class="$style.content">
-      <Banner :selected-movie="searchMovieSelected" />
+      <Banner
+        v-if="searchMovieSelected"
+        :selected-movie="searchMovieSelected" />
       <SearchInput
         v-model="searchMovieName"
         :movies="searchList"
@@ -118,6 +120,11 @@ async function loadPopularMovies(page: number = 1) {
     const res = await getPopularMovies(params)
 
     movies.value = res.results;
+
+    if (!searchMovieSelected.value && movies.value.length > 0) {
+      searchMovieSelected.value = movies.value[0]
+    }
+
   } catch (error) {
     console.error(error)
   } finally {

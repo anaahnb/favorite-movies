@@ -11,10 +11,9 @@
     </div>
 
     <div :class="$style.movieName">
-      <p v-if="selectedMovie">
-        {{ selectedMovie?.title }} ({{ selectedMovie?.release_date }})
-      </p>
-      <p v-else> Marty Supreme (2025)</p>
+      <RouterLink :to="`/movies/${selectedMovie.id}`">
+        {{ movieTitleWithYear }}
+      </RouterLink>
     </div>
   </div>
 </template>
@@ -24,19 +23,25 @@
 import { computed } from 'vue';
 import type { Movie } from '~/types/movies'
 import MovieBanner from './movies/MovieBanner.vue';
+import { getYearFromDate } from '~/util/date'
 
 const props = defineProps<{
-  selectedMovie?: Movie
+  selectedMovie: Movie
 }>()
 
 const IMAGE_BASE_URL = import.meta.env.VITE_TMDB_IMAGE_BASE_URL
 
 const imageSrc = computed(() => {
-  if (props.selectedMovie?.backdrop_path) {
-    return `${IMAGE_BASE_URL}${props.selectedMovie.backdrop_path}`
-  }
+  return `${IMAGE_BASE_URL}${props.selectedMovie.backdrop_path}`
+})
 
-  return new URL('~/assets/img/banner.jpg', import.meta.url).href
+const movieTitleWithYear = computed(() => {
+  if (!props.selectedMovie) return ''
+
+  const { title, release_date } = props.selectedMovie
+  const year = release_date ? getYearFromDate(release_date) : ''
+
+  return `${title} (${year})`
 })
 </script>
 
@@ -53,7 +58,7 @@ const imageSrc = computed(() => {
 }
 
 .movieName {
-  p {
+  a {
     position: absolute;
     right: .75rem;
 
@@ -84,18 +89,6 @@ const imageSrc = computed(() => {
     line-height: 1.3;
     color: #fff;
     margin-bottom: 0.75rem;
-  }
-
-  p {
-    font-size: 16px;
-    color: #89a;
-    text-align: center;
-  }
-
-  span {
-    font-family: Arial;
-    font-weight: 400;
-    font-size: 16px;
   }
 }
 </style>
