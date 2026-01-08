@@ -4,7 +4,7 @@
       <div :class="$style.title">
         <p>Favoritos de <strong>{{ userName }}</strong></p>
         <div :class="$style.listDetails">
-          <span>Lista atualizada ontem</span>
+          <span>Lista atualizada {{ lastUpdatedAt }}</span>
         </div>
       </div>
       <FavoritesMoviesList :movies="movies" />
@@ -14,35 +14,36 @@
 
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue';
-import { getPopularMovies } from '~/api/tmdb';
+import { getFavoriteList } from '~/api/favorites';
 import FavoritesMoviesList from '~/components/movies/FavoritesMoviesList.vue';
 import { useAuthStore } from '~/stores/auth';
-import type { Movie } from '~/types/movies';
+import type { FavoriteMovie } from '~/types/movies';
+import { formatLastUpdate } from '~/util/date';
 
 const auth = useAuthStore();
 
-const movies = ref<Movie[]>([]);
+const movies = ref<FavoriteMovie[]>([]);
 
 const userName = computed(() => auth.user?.name ?? '');
 
-async function loadPopularMovies(page: number = 1) {
+const lastUpdatedAt = computed(() => {
+  if (!movies.value.length) return null;
+
+  return formatLastUpdate(movies.value[0]?.created_at);
+});
+
+async function loadMovieList() {
   try {
-    const params = {
-      language: 'pt-BR',
-      page,
-    };
+    const res = await getFavoriteList()
 
-    const res = await getPopularMovies(params)
-
-    movies.value = res.results;
-    console.log(movies.value)
+    movies.value = res;
   } catch (error) {
     console.error(error)
   }
 }
 
 onMounted(() => {
-  loadPopularMovies()
+  loadMovieList()
 })
 
 </script>

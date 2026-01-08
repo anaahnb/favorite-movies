@@ -37,11 +37,10 @@
 <script setup lang="ts">
 import { onMounted, ref, computed } from 'vue'
 import { useRoute } from 'vue-router'
-import { getMovieDetailsById } from '~/api/tmdb'
+
 import { useAuthStore } from '~/stores/auth'
 import { useUIStore } from '~/stores/ui'
-import type { Movie } from '~/types/movies'
-import { getYearFromDate } from '~/util/date'
+import { useToast } from 'vue-toast-notification'
 
 import MovieBanner from '~/components/movies/MovieBanner.vue'
 import MovieDetailsPoster from '~/components/movies/MovieDetailsPoster.vue'
@@ -49,9 +48,16 @@ import MovieDetailsHeader from '~/components/movies/MovieDetailsHeader.vue'
 import MovieDetailsOverview from '~/components/movies/MovieDetailsOverview.vue'
 import MovieDetailsAside from '~/components/movies/MovieDetailsAside.vue'
 
-const route = useRoute()
-const auth = useAuthStore()
-const ui = useUIStore()
+import type { Movie } from '~/types/movies'
+import { getYearFromDate } from '~/util/date'
+import { getMovieDetailsById } from '~/api/tmdb'
+import { storeFavoriteMovie } from '~/api/favorites'
+
+const route = useRoute();
+const auth = useAuthStore();
+const ui = useUIStore();
+const $toast = useToast();
+
 
 const movie = ref<Movie | null>(null)
 const loading = ref(false)
@@ -84,8 +90,23 @@ async function loadMovieDetails() {
   }
 }
 
-function onAddToFavorites() {
-  console.log('Adicionar aos favoritos', movie.value)
+async function onAddToFavorites() {
+  try {
+    const params = {
+      tmdb_movie_id: movie.value?.id,
+      title: movie.value?.title,
+      poster_path: movie.value?.poster_path
+    }
+
+    console.log(params)
+
+    await storeFavoriteMovie(params)
+
+    $toast.success('Filme adicionado aos favoritos!', { position: 'top-right' })
+  } catch (error: any) {
+    const message = error?.response?.data?.message || 'Não foi possível adicionar o filme aos favoritos';
+    $toast.error(message, { position: 'top-right' });
+  }
 }
 
 onMounted(loadMovieDetails)

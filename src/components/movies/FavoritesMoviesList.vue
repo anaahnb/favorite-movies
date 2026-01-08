@@ -5,7 +5,7 @@
         v-for="movie in movies"
         :key="movie.id"
         :src="getImageUrl(movie.poster_path)"
-        :alt="`Cartaz do filme ${movie.original_title}`"
+        :alt="`Cartaz do filme ${movie.title}`"
         @click="onSelectMovie(movie)"
         removable />
     </div>
@@ -14,14 +14,14 @@
 
 <script setup lang="ts">
 import MovieCard from '~/components/movies/MovieCard.vue';
-import type { Movie } from '~/types/movies'
+import type { FavoriteMovie } from '~/types/movies'
 
 const props = defineProps<{
-  movies: Movie[]
+  movies: FavoriteMovie[]
 }>()
 
 const emit = defineEmits<{
-  (event: 'select', movie: Movie): void;
+  (event: 'select', movie: FavoriteMovie): void;
 }>()
 
 const IMAGE_BASE_URL = import.meta.env.VITE_TMDB_IMAGE_BASE_URL
@@ -31,7 +31,7 @@ function getImageUrl(path: string | null) {
   return `${IMAGE_BASE_URL}${path}`
 }
 
-function onSelectMovie(movie: Movie) {
+function onSelectMovie(movie: FavoriteMovie) {
   emit('select', movie)
 }
 </script>

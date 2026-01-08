@@ -17,3 +17,11 @@ export interface Genres {
   id: number
   name: string
 }
+
+export type FavoriteMovie = {
+  id: number;
+  tmdb_movie_id: number;
+  title: string;
+  poster_path: string | null;
+  created_at: string;
+};
