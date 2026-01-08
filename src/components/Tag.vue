@@ -14,8 +14,8 @@ defineProps<{
 .tag {
   color: #9ab;
   background-color: #283038;
-  padding: 3px 6px;
-  font-size: 12px;
+  padding: 0.1875rem 0.375rem;
+  font-size: 0.75rem;
   width: fit-content;
 }
 </style>

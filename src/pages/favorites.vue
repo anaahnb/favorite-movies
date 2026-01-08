@@ -76,7 +76,7 @@ onMounted(() => {
 
     .listDetails {
       span {
-        font-size: 12px;
+        font-size: 0.75rem;
         color: #678;
       }
     }

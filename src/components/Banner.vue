@@ -65,7 +65,7 @@ const movieTitleWithYear = computed(() => {
     top: 30%;
     writing-mode: vertical-lr;
 
-    font-size: 14px;
+    font-size: .875rem;
     color: #89a;
     z-index: 2;
 
@@ -76,7 +76,7 @@ const movieTitleWithYear = computed(() => {
 
 .titleContainer {
   position: absolute;
-  bottom: 24px;
+  bottom: 1.5rem;
   z-index: 2;
 
   text-align: center;

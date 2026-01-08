@@ -54,13 +54,13 @@ defineExpose({ inputRef })
   input {
     background: #2c3440;
     color: #fff;
-    font-size: 14px;
+    font-size: .875rem;
     border-radius: 0.25rem;
     padding: 0.5rem;
     border: none;
     box-sizing: border-box;
     width: 100%;
-    min-height: 37px;
+    min-height: 2.3125rem;
 
 
     &::placeholder {

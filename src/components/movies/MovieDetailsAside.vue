@@ -62,11 +62,11 @@ function onFavorite() {
 }
 
 .favoriteCard {
-  padding: 8px;
+  padding: .5rem;
   border-radius: 3px;
   background-color: #456;
   text-align: left;
-  font-size: 14px;
+  font-size: .875rem;
   margin-bottom: 1rem;
 
   a {
@@ -117,9 +117,9 @@ function onFavorite() {
       margin: 0;
       color: #789;
       font-weight: 300;
-      font-size: 20px;
-      right: -186px;
-      bottom: -24px;
+      font-size: 1.25rem;
+      right: -11.625rem;
+      bottom: -1.5rem;
     }
   }
 }

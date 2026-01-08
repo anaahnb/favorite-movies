@@ -68,8 +68,8 @@ function onRemove() {
 
 .remove {
   position: absolute;
-  top: 4px;
-  right: 4px;
+  top: 0.25rem;
+  right: .25rem;
 
   width: 1.5rem;
   height: 1.5rem;

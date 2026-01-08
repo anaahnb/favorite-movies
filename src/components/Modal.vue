@@ -63,7 +63,7 @@ onUnmounted(() => {
   position: fixed;
   inset: 0;
   background: rgba(0, 0, 0, 0.7);
-  backdrop-filter: blur(4px);
+  backdrop-filter: blur(.25rem);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -74,10 +74,10 @@ onUnmounted(() => {
   background: #1f252f;
   color: #fff;
   width: 100%;
-  max-width: 520px;
+  max-width: 32.5rem;
   border-radius: 0.75rem;
   overflow: hidden;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+  box-shadow: 0 1.25rem 3.75rem rgba(0, 0, 0, 0.6);
 }
 
 .header {

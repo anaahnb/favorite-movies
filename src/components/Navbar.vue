@@ -72,13 +72,13 @@ const menuItems = computed<MenuItem[]>(() => {
 <style lang="scss" module>
 .navbar {
   width: 100%;
-  height: 64px;
+  height: 4rem;
   background: #14181c;
   border-bottom: 1px solid #2c3440;
 }
 
 .container {
-  max-width: 1280px;
+  max-width: 80rem;
   height: 100%;
   margin: 0 auto;
   padding: 0 1.5rem;
