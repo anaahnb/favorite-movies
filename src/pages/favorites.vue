@@ -15,7 +15,7 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue';
 import { getPopularMovies } from '~/api/tmdb';
-import FavoritesMoviesList from '~/components/FavoritesMoviesList.vue';
+import FavoritesMoviesList from '~/components/movies/FavoritesMoviesList.vue';
 import { useAuthStore } from '~/stores/auth';
 import type { Movie } from '~/types/movies';
 

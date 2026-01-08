@@ -24,7 +24,7 @@ import { onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import Banner from '~/components/Banner.vue';
 import SearchInput from '~/components/SearchInput.vue';
-import PopularMoviesList from '~/components/PopularMoviesList.vue';
+import PopularMoviesList from '~/components/movies/PopularMoviesList.vue';
 import { getMovieListByName, getPopularMovies } from '~/api/tmdb';
 import type { Movie } from '~/types/movies';
 

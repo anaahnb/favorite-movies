@@ -22,7 +22,7 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 import type { Movie } from '~/types/movies'
-import MovieBanner from './movies/MovieBanner.vue';
+import MovieBanner from '~/components/movies/MovieBanner.vue';
 import { getYearFromDate } from '~/util/date'
 
 const props = defineProps<{

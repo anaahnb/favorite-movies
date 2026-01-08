@@ -13,7 +13,7 @@
 
 <script setup lang="ts">
 import type { Genres } from '~/types/movies';
-import Tag from '../Tag.vue';
+import Tag from '~/components/Tag.vue';
 
 defineProps<{
   tagline?: string

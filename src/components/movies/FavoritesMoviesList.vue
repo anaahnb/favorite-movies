@@ -13,7 +13,7 @@
 </template>
 
 <script setup lang="ts">
-import MovieCard from './MovieCard.vue';
+import MovieCard from '~/components/movies/MovieCard.vue';
 import type { Movie } from '~/types/movies'
 
 const props = defineProps<{
