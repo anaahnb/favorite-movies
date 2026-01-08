@@ -10,4 +10,10 @@ export interface Movie {
   genre_ids: number[]
   tagline: string
   vote_count: number
+  genres: Genres[]
+}
+
+export interface Genres {
+  id: number
+  name: string
 }

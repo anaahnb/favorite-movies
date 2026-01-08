@@ -18,7 +18,8 @@
           <div :class="$style.movieDetails">
             <MovieDetailsOverview
               :tagline="movie.tagline"
-              :overview="movie.overview" />
+              :overview="movie.overview"
+              :genders="movie.genres" />
 
             <MovieDetailsAside
               :is-authenticated="auth.isAuthenticated"
