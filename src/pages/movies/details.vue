@@ -1,32 +1,29 @@
 <template>
   <div :class="$style.details">
     <div v-if="loading">Carregando...</div>
-
     <div v-else-if="movie" :class="$style.content">
       <MovieBanner :image="backgroundImage" />
-
       <div :class="$style.detailsContainer">
         <MovieDetailsPoster
           :src="posterUrl"
           :alt="movie.title" />
-
         <div :class="$style.informationsContainer">
           <MovieDetailsHeader
             :title="movie.title"
             :year="getYearFromDate(movie.release_date) ?? 'N/A'" />
-
           <div :class="$style.movieDetails">
             <MovieDetailsOverview
               :tagline="movie.tagline"
               :overview="movie.overview"
               :genders="movie.genres" />
-
             <MovieDetailsAside
               :is-authenticated="auth.isAuthenticated"
+              :is-user-favorite-movie="isUserFavoriteMovie"
               :vote-average="movie.vote_average.toFixed(1)"
               :vote-count="movie.vote_count"
               @login="ui.openRegister"
-              @favorite="onAddToFavorites" />
+              @favorite="onAddToFavorites"
+              @remove="onRemoveMovieFromFavorite" />
           </div>
         </div>
       </div>
@@ -48,10 +45,10 @@ import MovieDetailsHeader from '~/components/movies/MovieDetailsHeader.vue'
 import MovieDetailsOverview from '~/components/movies/MovieDetailsOverview.vue'
 import MovieDetailsAside from '~/components/movies/MovieDetailsAside.vue'
 
-import type { Movie } from '~/types/movies'
+import type { FavoriteMovie, Movie } from '~/types/movies'
 import { getYearFromDate } from '~/util/date'
 import { getMovieDetailsById } from '~/api/tmdb'
-import { storeFavoriteMovie } from '~/api/favorites'
+import { deleteFavoriteMovie, getFavoriteList, storeFavoriteMovie } from '~/api/favorites'
 
 const route = useRoute();
 const auth = useAuthStore();
@@ -61,6 +58,7 @@ const $toast = useToast();
 
 const movie = ref<Movie | null>(null)
 const loading = ref(false)
+const favoriteMovies = ref<FavoriteMovie[] | null>([])
 
 const movieId = Number(route.params.id)
 const IMAGE_BASE_URL = import.meta.env.VITE_TMDB_IMAGE_BASE_URL
@@ -76,6 +74,15 @@ const posterUrl = computed(() =>
     ? `${IMAGE_BASE_URL}${movie.value.poster_path}`
     : ''
 )
+
+const isUserFavoriteMovie = computed(() => {
+  if (!auth.isAuthenticated || !movie.value) {
+    return false;
+  }
+
+  return favoriteMovies.value?.some(el => el.tmdb_movie_id === movie.value?.id);
+});
+
 
 async function loadMovieDetails() {
   loading.value = true
@@ -101,6 +108,7 @@ async function onAddToFavorites() {
     console.log(params)
 
     await storeFavoriteMovie(params)
+    await loadMovieList();
 
     $toast.success('Filme adicionado aos favoritos!', { position: 'top-right' })
   } catch (error: any) {
@@ -109,7 +117,34 @@ async function onAddToFavorites() {
   }
 }
 
-onMounted(loadMovieDetails)
+async function onRemoveMovieFromFavorite() {
+  try {
+    if (!movie.value || !favoriteMovies.value) return
+
+    await deleteFavoriteMovie(movie.value?.id)
+
+    favoriteMovies.value = favoriteMovies.value?.filter(fav => fav.tmdb_movie_id !== movie.value!.id);
+    $toast.success('Filme removido', { position: 'top-right' })
+  } catch (error: any) {
+    const message = error?.response?.data?.message || 'Não foi remover o filme dos favoritos';
+    $toast.error(message, { position: 'top-right' })
+  }
+}
+
+async function loadMovieList() {
+  try {
+    const res = await getFavoriteList()
+
+    favoriteMovies.value = res;
+  } catch (error) {
+    console.error(error)
+  }
+}
+
+onMounted(async () => {
+  await loadMovieDetails();
+  if (auth.isAuthenticated) await loadMovieList();
+});
 </script>
 
 <style lang="scss" module>

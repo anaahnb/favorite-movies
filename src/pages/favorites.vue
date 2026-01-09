@@ -7,20 +7,24 @@
           <span>Lista atualizada {{ lastUpdatedAt }}</span>
         </div>
       </div>
-      <FavoritesMoviesList :movies="movies" />
+      <FavoritesMoviesList
+        :movies="movies"
+        @remove="onRemoveMovieFromFavorite" />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue';
-import { getFavoriteList } from '~/api/favorites';
+import { useToast } from 'vue-toast-notification';
+import { deleteFavoriteMovie, getFavoriteList } from '~/api/favorites';
 import FavoritesMoviesList from '~/components/movies/FavoritesMoviesList.vue';
 import { useAuthStore } from '~/stores/auth';
 import type { FavoriteMovie } from '~/types/movies';
 import { formatLastUpdate } from '~/util/date';
 
 const auth = useAuthStore();
+const $toast = useToast();
 
 const movies = ref<FavoriteMovie[]>([]);
 
@@ -39,6 +43,19 @@ async function loadMovieList() {
     movies.value = res;
   } catch (error) {
     console.error(error)
+  }
+}
+
+async function onRemoveMovieFromFavorite(movie: FavoriteMovie) {
+  try {
+    console.log('entrou em remove', movie)
+    await deleteFavoriteMovie(movie.tmdb_movie_id)
+    await loadMovieList()
+
+    $toast.success('Filme removido', { position: 'top-right' })
+  } catch (error: any) {
+    const message = error?.response?.data?.message || 'Não foi remover o filme dos favoritos';
+    $toast.error(message, { position: 'top-right' })
   }
 }
 

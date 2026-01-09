@@ -1,31 +1,20 @@
 <template>
   <div :class="$style.container">
     <div :class="$style.favoriteCard">
-      <a
-        v-if="!isAuthenticated"
-        @click="onLogin">
-        Faça login para adicionar aos favoritos
-      </a>
-
-      <a
-        v-else
-        @click="onFavorite">
-        Adicionar aos favoritos
+      <a @click="handleFavoriteClick">
+        {{ favoriteActionLabel }}
       </a>
     </div>
-
     <div :class="$style.cardEvaluation">
       <div :class="$style.evaluationHeader">
         <h3>Avaliação</h3>
         <span>{{ voteCount }} avaliadores</span>
       </div>
-
       <div :class="$style.evaluationRating">
         <img
           :class="$style.evaluationGraph"
           :src="evaluateGraph"
           alt="Gráfico de avaliação" />
-
         <h2>{{ voteAverage }}</h2>
       </div>
     </div>
@@ -33,18 +22,26 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue';
 import evaluateGraph from '~/assets/img/evaluateGraph.png'
 
-defineProps<{
+const props = defineProps<{
   isAuthenticated: boolean
   voteAverage: string | number
   voteCount: number
+  isUserFavoriteMovie?: boolean
 }>()
 
 const emit = defineEmits<{
   (e: 'login'): void
   (e: 'favorite'): void
+  (e: 'remove'): void
 }>()
+
+const favoriteActionLabel = computed(() => {
+  if (!props.isAuthenticated) return 'Faça login para adicionar aos favoritos'
+  return props.isUserFavoriteMovie ? 'Remover dos favoritos' : 'Adicionar aos favoritos';
+});
 
 function onLogin() {
   emit('login')
@@ -52,6 +49,23 @@ function onLogin() {
 
 function onFavorite() {
   emit('favorite')
+}
+
+function onRemove() {
+  emit('remove')
+}
+
+function handleFavoriteClick() {
+  if (!props.isAuthenticated) {
+    onLogin()
+    return
+  }
+
+  if (props.isUserFavoriteMovie) {
+    onRemove()
+  } else {
+    onFavorite()
+  }
 }
 </script>
 

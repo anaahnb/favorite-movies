@@ -7,6 +7,7 @@
         :src="getImageUrl(movie.poster_path)"
         :alt="`Cartaz do filme ${movie.title}`"
         @click="onSelectMovie(movie)"
+        @remove="onRemove(movie)"
         removable />
     </div>
   </div>
@@ -22,6 +23,7 @@ const props = defineProps<{
 
 const emit = defineEmits<{
   (event: 'select', movie: FavoriteMovie): void;
+  (event: 'remove', movie: FavoriteMovie): void;
 }>()
 
 const IMAGE_BASE_URL = import.meta.env.VITE_TMDB_IMAGE_BASE_URL
@@ -33,6 +35,10 @@ function getImageUrl(path: string | null) {
 
 function onSelectMovie(movie: FavoriteMovie) {
   emit('select', movie)
+}
+
+function onRemove(movie: FavoriteMovie) {
+  emit('remove', movie)
 }
 </script>
 
