@@ -5,16 +5,19 @@
     </template>
 
     <form :class="$style.form" @submit.prevent="submit">
-      <Input
+      <div
         v-for="field in fields"
         :key="field.key"
-        v-model="form[field.key]"
-        :label="field.label"
-        :type="field.type"
-        :placeholder="field.placeholder"
-        :required="field.required"
-        :minlength="field.minlength"
-      />
+        :class="$style.field">
+        <Input
+          v-model="form[field.key]"
+          :label="field.label"
+          :type="field.type"
+          :placeholder="field.placeholder" />
+        <small v-if="errors[field.key]" :class="$style.error">
+          {{ errors[field.key] }}
+        </small>
+      </div>
 
       <div :class="$style.actions">
         <Button
@@ -42,8 +45,15 @@ import Button from '~/components/Button.vue';
 import Modal from '~/components/Modal.vue';
 import type { RegisterField, RegisterForm } from '~/types/register';
 
+import {
+  isRequired,
+  minLength,
+  isValidEmail,
+  passwordsMatch,
+} from '~/util/validators';
+
 const open = defineModel<boolean>({ default: false });
-const emit = defineEmits<{(e: 'submit', payload: RegisterForm): void}>();
+const emit = defineEmits<{ (e: 'submit', payload: RegisterForm): void }>();
 
 const form = reactive<RegisterForm>({
   name: '',
@@ -52,53 +62,96 @@ const form = reactive<RegisterForm>({
   password_confirmation: '',
 });
 
+const errors = reactive<Partial<Record<keyof RegisterForm, string>>>({});
+
 const fields: RegisterField[] = [
   {
     key: 'name',
     label: 'Nome',
     placeholder: 'Seu nome',
-    required: true,
   },
   {
     key: 'email',
     label: 'Email',
     type: 'email',
     placeholder: 'seu@email.com',
-    required: true,
   },
   {
     key: 'password',
     label: 'Senha',
     type: 'password',
     placeholder: '••••••••',
-    required: true,
-    minlength: 6,
   },
     {
     key: 'password_confirmation',
     label: 'Confirmar senha',
     type: 'password',
-    placeholder: '••••••••',
-    required: true,
-    minlength: 6,
-  }
+    placeholder: '*******',
+  },
 ];
 
-function submit() {
-  emit('submit', { ...form });
-
-  (Object.keys(form) as (keyof RegisterForm)[]).forEach(key => { form[key] = '' });
-  open.value = false;
+function clearErrors() {
+  Object.keys(errors).forEach(key => {
+    delete errors[key as keyof RegisterForm];
+  });
 }
 
+function validate(): boolean {
+  clearErrors();
 
+  if (!isRequired(form.name) || !minLength(form.name, 3)) {
+    errors.name = 'O nome deve ter pelo menos 3 caracteres';
+  }
+
+  if (!isRequired(form.email)) {
+    errors.email = 'Email é obrigatório';
+  } else if (!isValidEmail(form.email)) {
+    errors.email = 'Email inválido';
+  }
+
+  if (!isRequired(form.password) || !minLength(form.password, 8)) {
+    errors.password = 'A senha deve ter no mínimo 8 caracteres';
+  }
+
+  if (!passwordsMatch(form.password, form.password_confirmation)) {
+    errors.password_confirmation = 'As senhas não coincidem';
+  }
+
+  return Object.keys(errors).length === 0;
+}
+
+function submit() {
+  if (!validate()) return;
+
+  emit('submit', { ...form });
+
+  Object.keys(form).forEach(
+    key => (form[key as keyof RegisterForm] = '')
+  );
+
+  clearErrors();
+  open.value = false;
+}
 </script>
+
 
 <style lang="scss" module>
 .form {
   display: flex;
   flex-direction: column;
   gap: 1rem;
+
+
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .error {
+    font-size: 0.75rem;
+    color: #e5484d;
+  }
 
   .actions {
     display: flex;

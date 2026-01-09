@@ -29,11 +29,10 @@ async function handleRegister(payload: RegisterForm) {
     await auth.register(payload);
 
     $toast.success('Usuário cadastrado!', { position: 'top-right' })
+    ui.closeRegister();
   } catch (error: any) {
     const message = error?.response?.data?.message || 'Não foi possível criar o usuário';
     $toast.error(message, { position: 'top-right' });
-  } finally {
-    ui.closeRegister();
   }
 }
 

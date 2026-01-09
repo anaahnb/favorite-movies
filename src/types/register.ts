@@ -10,6 +10,6 @@ export interface RegisterField {
   label: string;
   type?: string;
   placeholder: string;
-  required: boolean;
+  required?: boolean;
   minlength?: number;
 }
