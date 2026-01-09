@@ -59,9 +59,9 @@ const $toast = useToast();
 const movie = ref<Movie | null>(null)
 const loading = ref(false)
 const favoriteMovies = ref<FavoriteMovie[] | null>([])
-
-const movieId = Number(route.params.id)
 const IMAGE_BASE_URL = import.meta.env.VITE_TMDB_IMAGE_BASE_URL
+
+const movieId = computed(() => Number(route.params.id))
 
 const backgroundImage = computed(() =>
   movie.value?.backdrop_path
@@ -87,7 +87,7 @@ const isUserFavoriteMovie = computed(() => {
 async function loadMovieDetails() {
   loading.value = true
   try {
-    movie.value = await getMovieDetailsById(movieId, {
+    movie.value = await getMovieDetailsById(movieId.value, {
       language: 'pt-BR',
     })
   } catch (error) {

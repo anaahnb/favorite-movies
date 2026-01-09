@@ -11,7 +11,7 @@
     </div>
 
     <div :class="$style.movieName">
-      <RouterLink :to="`/movies/${selectedMovie.id}`">
+      <RouterLink :to="{ name: 'details', params: { id: selectedMovie.id } }">
         {{ movieTitleWithYear }}
       </RouterLink>
     </div>
