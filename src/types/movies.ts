@@ -24,4 +24,5 @@ export type FavoriteMovie = {
   title: string;
   poster_path: string | null;
   created_at: string;
+  genre_ids : number[]
 };

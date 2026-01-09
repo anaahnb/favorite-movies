@@ -8,3 +8,6 @@ export const getMovieListByName = (params: object) =>
 
 export const getMovieDetailsById = (movie_id: number, params: object) =>
   axios.get(`/movie/${movie_id}`, { params }).then(res => res.data)
+
+export const getMovieGenres = (params?: object) =>
+  axios.get('/genre/movie/list', { params }).then(res => res.data)

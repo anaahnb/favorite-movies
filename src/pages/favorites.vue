@@ -4,12 +4,21 @@
       <div :class="$style.title">
         <p>Favoritos de <strong>{{ userName }}</strong></p>
         <div :class="$style.listDetails">
+          <GenreSelect
+            v-model="selectedGenre"
+            :genres="genres" />
           <span>Lista atualizada {{ lastUpdatedAt }}</span>
         </div>
       </div>
       <FavoritesMoviesList
-        :movies="movies"
+        v-if="filteredMovies.length > 0"
+        :movies="filteredMovies"
         @remove="onRemoveMovieFromFavorite" />
+      <div
+        v-else
+        :class="$style.noData">
+        Nenhum filme adicionado à lista.
+      </div>
     </div>
   </div>
 </template>
@@ -18,15 +27,19 @@
 import { computed, onMounted, ref } from 'vue';
 import { useToast } from 'vue-toast-notification';
 import { deleteFavoriteMovie, getFavoriteList } from '~/api/favorites';
+import { getMovieGenres } from '~/api/tmdb';
+import GenreSelect, { type Genre } from '~/components/GenreSelect.vue';
 import FavoritesMoviesList from '~/components/movies/FavoritesMoviesList.vue';
 import { useAuthStore } from '~/stores/auth';
-import type { FavoriteMovie } from '~/types/movies';
+import type { FavoriteMovie, Movie } from '~/types/movies';
 import { formatLastUpdate } from '~/util/date';
 
 const auth = useAuthStore();
 const $toast = useToast();
 
 const movies = ref<FavoriteMovie[]>([]);
+const genres = ref<Genre[]>([])
+const selectedGenre = ref<number | null>(null)
 
 const userName = computed(() => auth.user?.name ?? '');
 
@@ -35,6 +48,15 @@ const lastUpdatedAt = computed(() => {
 
   return formatLastUpdate(movies.value[0]?.created_at);
 });
+
+const filteredMovies = computed(() => {
+  if (!selectedGenre.value) return movies.value
+
+  return movies.value.filter((movie: FavoriteMovie) =>
+    movie.genre_ids?.includes(selectedGenre.value!)
+  )
+})
+
 
 async function loadMovieList() {
   try {
@@ -59,8 +81,20 @@ async function onRemoveMovieFromFavorite(movie: FavoriteMovie) {
   }
 }
 
-onMounted(() => {
-  loadMovieList()
+async function getGenres() {
+  try {
+    const res = await getMovieGenres({ language: 'pt-BR' })
+    genres.value = res.genres
+  } catch {
+    console.error('Não foi possível buscar os gêneros')
+  }
+}
+
+onMounted(async () => {
+  await Promise.all([
+    loadMovieList(),
+    getGenres(),
+  ])
 })
 
 </script>
@@ -69,6 +103,7 @@ onMounted(() => {
 .container {
   display: flex;
   justify-content: center;
+  height: 84vh;
 
   .favoriteList {
     font-size: 1rem;
@@ -76,6 +111,12 @@ onMounted(() => {
     font-family: Arial;
     margin-top: 2rem;
     width: 60rem;
+
+    .noData {
+      font-size: .875rem;
+      color: #678;
+      margin-top: 0.5rem;
+    }
 
     .title {
       border-bottom: 1px solid #456;
@@ -85,7 +126,7 @@ onMounted(() => {
     }
 
     p {
-      margin: 0;
+      margin: 0 0 .375rem 0;
     }
 
     strong {
@@ -93,6 +134,11 @@ onMounted(() => {
     }
 
     .listDetails {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: .375rem;
+
       span {
         font-size: 0.75rem;
         color: #678;

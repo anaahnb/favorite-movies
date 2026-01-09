@@ -102,10 +102,9 @@ async function onAddToFavorites() {
     const params = {
       tmdb_movie_id: movie.value?.id,
       title: movie.value?.title,
-      poster_path: movie.value?.poster_path
+      poster_path: movie.value?.poster_path,
+      genre_ids: movie.value?.genres.map(el => el.id)
     }
-
-    console.log(params)
 
     await storeFavoriteMovie(params)
     await loadMovieList();
