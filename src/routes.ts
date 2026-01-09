@@ -36,10 +36,15 @@ function initRouter(basePath: string) {
   router.beforeEach(async (to) => {
     const auth = useAuthStore();
 
+    if (!auth.initialized) {
+      await auth.fetchUser();
+    }
+
     if (to.meta.requiresAuth && !auth.isAuthenticated) {
       return { path: '/' };
     }
   });
+
 
   return router;
 }

@@ -28,9 +28,7 @@ async function handleRegister(payload: RegisterForm) {
     console.log('payload', payload)
     await auth.register(payload);
 
-    $toast.success('Usuário cadastrado!', {
-      position: 'top-right'
-    })
+    $toast.success('Usuário cadastrado!', { position: 'top-right' })
   } catch (error: any) {
     const message = error?.response?.data?.message || 'Não foi possível criar o usuário';
     $toast.error(message, { position: 'top-right' });

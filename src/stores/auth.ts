@@ -7,6 +7,7 @@ export const useAuthStore = defineStore('auth', () => {
   const user = ref<any | null>(null);
   const token = ref<string | null>(localStorage.getItem('token'));
   const loading = ref(false);
+  const initialized = ref(false);
 
   const isAuthenticated = computed(() => !!user.value);
 
@@ -41,12 +42,17 @@ export const useAuthStore = defineStore('auth', () => {
   }
 
   async function fetchUser() {
-    if (!token.value) return;
+    if (!token.value) {
+      initialized.value = true;
+      return;
+    }
 
     try {
       user.value = await me();
     } catch {
-      clearSession();
+      logout();
+    } finally {
+      initialized.value = true;
     }
   }
 
@@ -71,6 +77,7 @@ export const useAuthStore = defineStore('auth', () => {
     token,
     loading,
     isAuthenticated,
+    initialized,
     register,
     login,
     logout,
