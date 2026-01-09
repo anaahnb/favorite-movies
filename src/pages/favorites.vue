@@ -13,6 +13,7 @@
       <FavoritesMoviesList
         v-if="filteredMovies.length > 0"
         :movies="filteredMovies"
+        @select="onSelectMovie"
         @remove="onRemoveMovieFromFavorite" />
       <div
         v-else
@@ -25,17 +26,19 @@
 
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue';
+import { useRouter } from 'vue-router';
 import { useToast } from 'vue-toast-notification';
 import { deleteFavoriteMovie, getFavoriteList } from '~/api/favorites';
 import { getMovieGenres } from '~/api/tmdb';
 import GenreSelect, { type Genre } from '~/components/GenreSelect.vue';
 import FavoritesMoviesList from '~/components/movies/FavoritesMoviesList.vue';
 import { useAuthStore } from '~/stores/auth';
-import type { FavoriteMovie, Movie } from '~/types/movies';
+import type { FavoriteMovie } from '~/types/movies';
 import { formatLastUpdate } from '~/util/date';
 
 const auth = useAuthStore();
 const $toast = useToast();
+const router = useRouter();
 
 const movies = ref<FavoriteMovie[]>([]);
 const genres = ref<Genre[]>([])
@@ -57,6 +60,12 @@ const filteredMovies = computed(() => {
   )
 })
 
+function onSelectMovie(movie: FavoriteMovie) {
+  router.push({
+    name: 'details',
+    params: { id: movie.tmdb_movie_id },
+  });
+}
 
 async function loadMovieList() {
   try {
