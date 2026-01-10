@@ -18,7 +18,7 @@
             @click="onSelect(movie)">
             <img
               v-if="movie.poster_path"
-              :src="getImageUrl(movie.poster_path)"
+              :src="getTmdbImage(movie.poster_path)"
               :alt="`Cartaz do filme ${movie.original_title}`" />
             <div>
               <strong>{{ movie.original_title }}</strong>
@@ -50,8 +50,10 @@
 import { computed, ref, watch } from 'vue'
 import Button from '~/components/Button.vue'
 import Input from '~/components/Input.vue';
+import Loading from '~/components/Loading.vue';
 import type { Movie } from '~/types/movies'
-import Loading from './Loading.vue';
+import { getTmdbImage } from '~/util/tmdbImage';
+
 
 const search = defineModel<string>({ default: '' })
 
@@ -67,7 +69,6 @@ const emit = defineEmits<{
   (e: 'explicit-change', value: boolean): void
 }>()
 
-const IMAGE_BASE_URL = import.meta.env.VITE_TMDB_IMAGE_BASE_URL
 const resultsRef = ref<HTMLElement | null>(null)
 const explict = ref(false)
 
@@ -78,11 +79,6 @@ watch(explict, (value) => {
 const showResults = computed(() => {
   return search.value.length > 0 && props.movies.length > 0
 })
-
-function getImageUrl(path: string | null) {
-  if (!path) return ''
-  return `${IMAGE_BASE_URL}${path}`
-}
 
 function onSearch() {
   if (!search.value.trim()) return

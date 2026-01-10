@@ -20,20 +20,25 @@
 
 
 <script setup lang="ts">
-import { computed } from 'vue';
+import { computed, ref, watch } from 'vue';
 import type { Movie } from '~/types/movies'
 import MovieBanner from '~/components/movies/MovieBanner.vue';
 import { getYearFromDate } from '~/util/date'
+import { getTmdbImage } from '~/util/tmdbImage';
 
 const props = defineProps<{
   selectedMovie: Movie
 }>()
 
-const IMAGE_BASE_URL = import.meta.env.VITE_TMDB_IMAGE_BASE_URL
+const imageSrc = ref('');
 
-const imageSrc = computed(() => {
-  return `${IMAGE_BASE_URL}${props.selectedMovie.backdrop_path}`
-})
+watch(
+  () => props.selectedMovie,
+  movie => {
+    imageSrc.value = getTmdbImage(movie?.backdrop_path);
+  },
+  { immediate: true }
+);
 
 const movieTitleWithYear = computed(() => {
   if (!props.selectedMovie) return ''

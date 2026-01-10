@@ -1,6 +1,6 @@
 <template>
   <div :class="$style.details">
-    <Loading v-if="true" />
+    <Loading v-if="loading" />
     <div
       v-else-if="movie"
       :class="$style.content">
@@ -46,12 +46,13 @@ import MovieDetailsPoster from '~/components/movies/MovieDetailsPoster.vue'
 import MovieDetailsHeader from '~/components/movies/MovieDetailsHeader.vue'
 import MovieDetailsOverview from '~/components/movies/MovieDetailsOverview.vue'
 import MovieDetailsAside from '~/components/movies/MovieDetailsAside.vue'
+import Loading from '~/components/Loading.vue'
 
 import type { FavoriteMovie, Movie } from '~/types/movies'
 import { getYearFromDate } from '~/util/date'
+import { getTmdbImage } from '~/util/tmdbImage';
 import { getMovieDetailsById } from '~/api/tmdb'
 import { deleteFavoriteMovie, getFavoriteList, storeFavoriteMovie } from '~/api/favorites'
-import Loading from '~/components/Loading.vue'
 
 const route = useRoute();
 const auth = useAuthStore();
@@ -62,21 +63,16 @@ const $toast = useToast();
 const movie = ref<Movie | null>(null)
 const loading = ref(false)
 const favoriteMovies = ref<FavoriteMovie[] | null>([])
-const IMAGE_BASE_URL = import.meta.env.VITE_TMDB_IMAGE_BASE_URL
 
 const movieId = computed(() => Number(route.params.id))
 
 const backgroundImage = computed(() =>
-  movie.value?.backdrop_path
-    ? `${IMAGE_BASE_URL}${movie.value.backdrop_path}`
-    : new URL('~/assets/img/banner.jpg', import.meta.url).href
-)
+  getTmdbImage(movie.value?.backdrop_path, {
+    fallback: new URL('~/assets/img/banner.png', import.meta.url).href,
+  })
+);
 
-const posterUrl = computed(() =>
-  movie.value?.poster_path
-    ? `${IMAGE_BASE_URL}${movie.value.poster_path}`
-    : ''
-)
+const posterUrl = computed(() => getTmdbImage(movie.value?.poster_path));
 
 const isUserFavoriteMovie = computed(() => {
   if (!auth.isAuthenticated || !movie.value) {
