@@ -1,9 +1,12 @@
 import { defineStore } from 'pinia';
 import { ref, computed } from 'vue';
+import { useRouter } from 'vue-router';
 import { loginUser, registerUser, logoutUser, me } from '~/api/auth';
 import type { RegisterForm } from '~/types/register';
 
 export const useAuthStore = defineStore('auth', () => {
+  const router = useRouter();
+
   const user = ref<any | null>(null);
   const token = ref<string | null>(localStorage.getItem('token'));
   const loading = ref(false);
@@ -66,6 +69,7 @@ export const useAuthStore = defineStore('auth', () => {
   async function logout() {
     try {
       await logoutUser();
+      router.push({ name: '/' });
     } finally {
       clearSession();
     }

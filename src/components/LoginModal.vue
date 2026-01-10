@@ -1,9 +1,8 @@
 <template>
   <Modal v-model="open">
     <template #header>
-      <h3>Criar conta</h3>
+      <h3>Entrar</h3>
     </template>
-
     <form :class="$style.form" @submit.prevent="submit">
       <div
         v-for="field in fields"
@@ -18,7 +17,6 @@
           {{ errors[field.key] }}
         </small>
       </div>
-
       <div :class="$style.actions">
         <Button
           size="sm"
@@ -27,11 +25,10 @@
           @click="open = false">
           Cancelar
         </Button>
-
         <Button
           size="sm"
           type="submit">
-          Criar conta
+          Entrar
         </Button>
       </div>
     </form>
@@ -43,33 +40,21 @@ import { reactive } from 'vue';
 import Input from '~/components/Input.vue';
 import Button from '~/components/Button.vue';
 import Modal from '~/components/Modal.vue';
-import type { RegisterField, RegisterForm } from '~/types/register';
+import { isRequired, isValidEmail } from '~/util/validators';
+import type { LoginField, LoginForm } from '~/types/login';
 
-import {
-  isRequired,
-  minLength,
-  isValidEmail,
-  passwordsMatch,
-} from '~/util/validators';
 
 const open = defineModel<boolean>({ default: false });
-const emit = defineEmits<{ (e: 'submit', payload: RegisterForm): void }>();
+const emit = defineEmits<{ (e: 'submit', payload: LoginForm): void }>();
 
-const form = reactive<RegisterForm>({
-  name: '',
+const form = reactive<LoginForm>({
   email: '',
   password: '',
-  password_confirmation: '',
 });
 
-const errors = reactive<Partial<Record<keyof RegisterForm, string>>>({});
+const errors = reactive<Partial<Record<keyof LoginForm, string>>>({});
 
-const fields: RegisterField[] = [
-  {
-    key: 'name',
-    label: 'Nome',
-    placeholder: 'Seu nome',
-  },
+const fields: LoginField[] = [
   {
     key: 'email',
     label: 'Email',
@@ -80,28 +65,18 @@ const fields: RegisterField[] = [
     key: 'password',
     label: 'Senha',
     type: 'password',
-    placeholder: '********',
-  },
-    {
-    key: 'password_confirmation',
-    label: 'Confirmar senha',
-    type: 'password',
-    placeholder: '*******',
+    placeholder: '*********',
   },
 ];
 
 function clearErrors() {
   Object.keys(errors).forEach(key => {
-    delete errors[key as keyof RegisterForm];
+    delete errors[key as keyof LoginForm];
   });
 }
 
 function validate(): boolean {
   clearErrors();
-
-  if (!isRequired(form.name) || !minLength(form.name, 3)) {
-    errors.name = 'O nome deve ter pelo menos 3 caracteres';
-  }
 
   if (!isRequired(form.email)) {
     errors.email = 'Email é obrigatório';
@@ -109,12 +84,8 @@ function validate(): boolean {
     errors.email = 'Email inválido';
   }
 
-  if (!isRequired(form.password) || !minLength(form.password, 8)) {
-    errors.password = 'A senha deve ter no mínimo 8 caracteres';
-  }
-
-  if (!passwordsMatch(form.password, form.password_confirmation)) {
-    errors.password_confirmation = 'As senhas não coincidem';
+  if (!isRequired(form.password)) {
+    errors.password = 'Senha é obrigatória';
   }
 
   return Object.keys(errors).length === 0;
@@ -126,7 +97,7 @@ function submit() {
   emit('submit', { ...form });
 
   Object.keys(form).forEach(
-    key => (form[key as keyof RegisterForm] = '')
+    key => (form[key as keyof LoginForm] = '')
   );
 
   clearErrors();
@@ -134,13 +105,11 @@ function submit() {
 }
 </script>
 
-
 <style lang="scss" module>
 .form {
   display: flex;
   flex-direction: column;
   gap: 1rem;
-
 
   .field {
     display: flex;
