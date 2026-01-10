@@ -32,14 +32,16 @@ type MenuItem = {
   onClick?: () => void
 }
 
+const exploreItem: MenuItem = {
+  label: 'Explorar',
+  component: RouterLink,
+  props: { to: '/' },
+};
+
 const menuItems = computed<MenuItem[]>(() => {
   if (auth.isAuthenticated) {
     return [
-      {
-        label: 'Explorar',
-        component: RouterLink,
-        props: { to: '/' },
-      },
+      exploreItem,
       {
         label: 'Favoritos',
         component: RouterLink,
@@ -50,10 +52,11 @@ const menuItems = computed<MenuItem[]>(() => {
         component: 'button',
         onClick: auth.logout,
       },
-    ]
+    ];
   }
 
   return [
+    exploreItem,
     {
       label: 'Inscreva-se',
       component: 'button',
@@ -64,8 +67,8 @@ const menuItems = computed<MenuItem[]>(() => {
       component: 'button',
       onClick: ui.openLogin,
     },
-  ]
-})
+  ];
+});
 </script>
 
 

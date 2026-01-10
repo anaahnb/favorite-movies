@@ -69,7 +69,7 @@ export const useAuthStore = defineStore('auth', () => {
   async function logout() {
     try {
       await logoutUser();
-      router.push({ name: '/' });
+      router.push({ name: 'index' });
     } finally {
       clearSession();
     }
