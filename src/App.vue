@@ -1,6 +1,6 @@
 <template>
   <Navbar />
-  <RouterView />
+  <RouterView :class="$style.container" />
   <Footer />
 
   <RegisterModal
@@ -40,4 +40,11 @@ onMounted(() => {
   auth.fetchUser();
 });
 </script>
+
+<style module lang="scss">
+  .container {
+    padding-top: 4rem;
+  }
+
+</style>
 

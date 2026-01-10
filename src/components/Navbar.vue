@@ -75,41 +75,47 @@ const menuItems = computed<MenuItem[]>(() => {
   height: 4rem;
   background: #14181c;
   border-bottom: 1px solid #2c3440;
-}
+  position: fixed;
+  z-index: 3;
 
-.container {
-  max-width: 80rem;
-  height: 100%;
-  margin: 0 auto;
-  padding: 0 1.5rem;
+  .container {
+    max-width: 80rem;
+    height: 100%;
+    margin: 0 auto;
+    padding: 0 1.5rem;
 
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-
-.nav {
-  display: flex;
-  gap: 1.5rem;
-}
-
-.link {
-  position: relative;
-  color: #9ab;
-  text-decoration: none;
-  font-size: 0.95rem;
-  font-weight: 500;
-
-  border: 0;
-  background: transparent;
-
-  &:hover {
-    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
-  &.active {
-    color: #fff;
+  .nav {
+    display: flex;
+    gap: 1.5rem;
+
+    .link {
+      position: relative;
+      color: #9ab;
+      text-decoration: none;
+      font-size: 0.95rem;
+      font-weight: 500;
+
+      border: 0;
+      background: transparent;
+
+      &:hover {
+        color: #fff;
+      }
+
+      &.active {
+        color: #fff;
+      }
+    }
   }
+
 }
+
+
+
+
 </style>
