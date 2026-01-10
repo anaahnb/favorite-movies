@@ -1,7 +1,9 @@
 <template>
   <div :class="$style.details">
-    <div v-if="loading">Carregando...</div>
-    <div v-else-if="movie" :class="$style.content">
+    <Loading v-if="true" />
+    <div
+      v-else-if="movie"
+      :class="$style.content">
       <MovieBanner :image="backgroundImage" />
       <div :class="$style.detailsContainer">
         <MovieDetailsPoster
@@ -49,6 +51,7 @@ import type { FavoriteMovie, Movie } from '~/types/movies'
 import { getYearFromDate } from '~/util/date'
 import { getMovieDetailsById } from '~/api/tmdb'
 import { deleteFavoriteMovie, getFavoriteList, storeFavoriteMovie } from '~/api/favorites'
+import Loading from '~/components/Loading.vue'
 
 const route = useRoute();
 const auth = useAuthStore();

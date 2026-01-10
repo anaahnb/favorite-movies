@@ -27,9 +27,10 @@
               </span>
             </div>
           </button>
-          <div v-if="loading" :class="$style.loading">
-            Carregando...
-          </div>
+          <Loading
+            v-if="loading"
+            :size="24"
+            :class="$style.loading" />
         </div>
       </div>
       <Button @click="onSearch">
@@ -50,6 +51,7 @@ import { computed, ref, watch } from 'vue'
 import Button from '~/components/Button.vue'
 import Input from '~/components/Input.vue';
 import type { Movie } from '~/types/movies'
+import Loading from './Loading.vue';
 
 const search = defineModel<string>({ default: '' })
 
@@ -163,8 +165,6 @@ function onScroll() {
 
         .loading {
           padding: 0.75rem;
-          text-align: center;
-          color: #9ab;
         }
       }
     }

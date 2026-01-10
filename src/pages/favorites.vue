@@ -10,8 +10,9 @@
           <span>Lista atualizada {{ lastUpdatedAt }}</span>
         </div>
       </div>
+      <Loading v-if="loading" />
       <FavoritesMoviesList
-        v-if="filteredMovies.length > 0"
+        v-else-if="filteredMovies.length > 0"
         :movies="filteredMovies"
         @select="onSelectMovie"
         @remove="onRemoveMovieFromFavorite" />
@@ -31,6 +32,7 @@ import { useToast } from 'vue-toast-notification';
 import { deleteFavoriteMovie, getFavoriteList } from '~/api/favorites';
 import { getMovieGenres } from '~/api/tmdb';
 import GenreSelect, { type Genre } from '~/components/GenreSelect.vue';
+import Loading from '~/components/Loading.vue';
 import FavoritesMoviesList from '~/components/movies/FavoritesMoviesList.vue';
 import { useAuthStore } from '~/stores/auth';
 import type { FavoriteMovie } from '~/types/movies';
@@ -43,6 +45,7 @@ const router = useRouter();
 const movies = ref<FavoriteMovie[]>([]);
 const genres = ref<Genre[]>([])
 const selectedGenre = ref<number | null>(null)
+const loading = ref<boolean>(false)
 
 const userName = computed(() => auth.user?.name ?? '');
 
@@ -69,11 +72,14 @@ function onSelectMovie(movie: FavoriteMovie) {
 
 async function loadMovieList() {
   try {
+    loading.value = true
     const res = await getFavoriteList()
 
     movies.value = res;
   } catch (error) {
     console.error(error)
+  } finally {
+    loading.value = false
   }
 }
 

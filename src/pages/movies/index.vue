@@ -1,6 +1,7 @@
 <template>
   <div :class="$style.main">
-    <div :class="$style.content">
+    <Loading v-if="loading" />
+    <div v-else :class="$style.content">
       <Banner
         v-if="searchMovieSelected"
         :selected-movie="searchMovieSelected" />
@@ -27,6 +28,7 @@ import SearchInput from '~/components/SearchInput.vue';
 import PopularMoviesList from '~/components/movies/PopularMoviesList.vue';
 import { getMovieListByName, getPopularMovies } from '~/api/tmdb';
 import type { Movie } from '~/types/movies';
+import Loading from '~/components/Loading.vue';
 
 const router = useRouter();
 
