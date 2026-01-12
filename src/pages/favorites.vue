@@ -126,6 +126,7 @@ onMounted(async () => {
     font-family: Arial;
     margin-top: 2rem;
     width: 60rem;
+    padding: 1rem;
 
     .noData {
       font-size: .875rem;

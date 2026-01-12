@@ -4,7 +4,7 @@
     <div
       v-else-if="movie"
       :class="$style.content">
-      <MovieBanner :image="backgroundImage" />
+      <MovieBanner :class="$style.banner" :image="backgroundImage" />
       <div :class="$style.detailsContainer">
         <MovieDetailsPoster
           :src="posterUrl"
@@ -160,17 +160,27 @@ onMounted(async () => {
   max-width: 60rem;
   display: flex;
   gap: 3rem;
-  align-items: flex-start;
+  align-items: center;
+  padding: 1rem;
+  flex-wrap: wrap;
 }
 
 .informationsContainer {
   display: flex;
   flex-direction: column;
+  flex: 1 1 27.5rem;
 }
 
 .movieDetails {
   display: flex;
   gap: 3rem;
   margin-top: 2rem;
+  flex-wrap: wrap;
+}
+
+@media screen and (max-width: 45.625rem) {
+  .banner {
+    display: none;
+  }
 }
 </style>

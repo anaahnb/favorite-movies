@@ -54,7 +54,7 @@ const movieTitleWithYear = computed(() => {
 <style lang="scss" module>
 .bannerContainer {
   position: relative;
-  width: 100%;
+  width: fit-content;
   height: auto;
   overflow: hidden;
   display: flex;

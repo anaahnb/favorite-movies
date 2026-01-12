@@ -39,7 +39,7 @@ function onRemove(movie: FavoriteMovie) {
 <style lang="scss" module>
 .listContainer {
   margin-top: 2rem;
-  width: 60rem;
+  width: 100%;
 
   .moviesWrapper {
     display: flex;

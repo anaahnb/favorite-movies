@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div :class="$style.textContainer">
     <p v-if="tagline" :class="$style.tagline">{{ tagline }}</p>
     <p :class="$style.text">{{ overview }}</p>
     <div :class="$style.gendersList">
@@ -23,6 +23,10 @@ defineProps<{
 </script>
 
 <style lang="scss" module>
+
+.textContainer {
+  flex: 1 1 19rem;
+}
 .tagline {
   text-transform: uppercase;
   color: #99aabb;

@@ -40,6 +40,7 @@ function onSelectMovie(movie: Movie) {
   max-width: 60rem;
   margin-top: 2rem;
   position: relative;
+  padding: 1rem;
 
   h2 {
     font-weight: 400;

@@ -11,7 +11,7 @@
   footer {
     background: #14181c;
     border-top: 1px solid #2c3440;
-    padding: .5rem 0;
+    padding: .5rem 1rem;
     display: flex;
     justify-content: center;
     color: #678;

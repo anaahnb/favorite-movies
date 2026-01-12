@@ -16,7 +16,8 @@ defineProps<{
 .banner {
   position: relative;
   width: 100%;
-  height: 31.25rem;
+  height: auto;
+  max-height: 40rem;
   overflow: hidden;
 
   img {
