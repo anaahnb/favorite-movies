@@ -1,7 +1,6 @@
 # Frontend
 
-Este repositório contém o front-end de uma aplicação de gerenciamento de filmes, desenvolvida para o teste técnico da empresa [LWSA | King Host](https://king.host/hospedagem-de-sites).
-
+Este repositório contém o front-end de uma aplicação de gerenciamento de filmes.
 
 ## Tecnologias utilizadas
 
