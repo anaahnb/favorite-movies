@@ -29,7 +29,7 @@ npm install
 
 O frontend consome APIs separadamente. Certifique-se de que:
 
-* O backend esteja rodando
+* O backend esteja rodando (Acesse-o [aqui](https://github.com/anaahnb/favorite-movies-api) para saber mais sobre a instalação)
 * As variáveis de ambiente estejam configuradas corretamente, conforme o tutorial abaixo:
 
 Na raiz desse repositório, existe um arquivo `.env.example`. Duplique o arquivo e renomeie a cópia para `.env`.
@@ -108,3 +108,9 @@ src/
  └─ routes.ts       # Configuração do Vue Router
 
 ```
+
+## Demonstração
+
+[Vídeo de demonstração da plataforma](https://raw.githubusercontent.com/anaahnb/favorite-movies/main/assets/video/website.mov)
+
+
