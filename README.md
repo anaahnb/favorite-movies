@@ -110,7 +110,9 @@ src/
 ```
 
 ## Demonstração
+Vídeo demonstrativo de como testar a aplicação através da interface
 
-[Vídeo de demonstração da plataforma](https://raw.githubusercontent.com/anaahnb/favorite-movies/main/assets/video/website.mov)
+![Descrição do GIF](src/assets/demo.gif)
+
 
 
